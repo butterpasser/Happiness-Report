@@ -1,6 +1,7 @@
 library(tidyverse)
 library(rvest)
 library(XML)
+library(httr)
 literacy_rate <- read.csv("literacyData.csv")
 literacyRate <- subset(literacy_rate,select=c(Indicator,Country,Time,Value))
 #ggplot(subset(literacyRate,Country=="Developing countries"),aes(Time,Value))+geom_line(aes(color=Indicator))
@@ -44,6 +45,6 @@ worldpovertyPop <- rbind(worldpovertyPop,x)
 # World poverty ends at 2026
 
 url <-"https://en.wikipedia.org/wiki/World_Happiness_Report"
-#url <- htmlParse(url)
-World_Happiness_Report <-xpathApply(url,"/html/body/div[3]/div[3]/div[4]/div/table[1]")
-#worldHappinessReport2018 <- readHTMLTable(url)
+url <- GET(url)
+tableList <- readHTMLTable(doc=content(url,"text"))
+worldHappinessReport2018 <- tableList[[5]]
